@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-探索"}); %>
+</head>
+<body class="explore-node-page">
+
+    <div class="main-wrapper mb-5 rib explore">
+      <nav class="navbar navbar-light bg-faded fixed-top p-0">
+        <div class="bg-faded clearfix text-center px-2 py-2">
+          <a href="/explore" id="explore-nav-back" class="btn btn-outline-secondary float-left" style="width: 50px; position: absolute; left: 20px;">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </a>
+          <span class="navbar-text text-muted">
+            #<%= tag.name %>
+          </span>
+        </div>
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" style="width: 20%; background-color: #232226">
+            <a class="nav-link active text-center rib-text-color-4 rib-f-size-dot8rem" data-toggle="tab" href="#all" role="tab">全部</a>
+          </li>
+          <li class="nav-item" style="width: 20%; background-color: #232226">
+            <a class="nav-link text-center rib-text-color-4 rib-f-size-dot8rem" data-toggle="tab" href="#article" role="tab">文章</a>
+          </li>
+          <li class="nav-item" style="width: 20%; background-color: #232226">
+            <a class="nav-link text-center rib-text-color-4 rib-f-size-dot8rem" data-toggle="tab" href="#chat" role="tab">聊天室</a>
+          </li>
+          <li class="nav-item" style="width: 20%; background-color: #232226">
+            <a class="nav-link text-center rib-text-color-4 rib-f-size-dot8rem" data-toggle="tab" href="#group" role="tab">圈子</a>
+          </li>
+          <li class="nav-item" style="width: 20%; background-color: #232226">
+            <a class="nav-link text-center rib-text-color-4 rib-f-size-dot8rem" data-toggle="tab" href="#event" role="tab">活動</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/explore/<%= tag.name %>?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" style="margin-top: 100px;">
+        <div class="tab-content">
+          <div class="tab-pane active rib social" id="all" role="tabpanel">
+            <div class="row">
+              <% if(tag.content) { %>
+              <% for(var i = 0; i < tag.content.length; i++) { %>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 mt-3">
+                    <span class="badge badge-pill rib-text-color-4 rib-bg-color-5 mt-2 mr-2">
+                      <% if(tag.content[i].type ==="article") { %>
+                        <%= "文章" %>
+                      <% } else if(tag.content[i].type ==="chat") { %>
+                        <%= "聊天室" %>
+                      <% } else if(tag.content[i].type ==="group") { %>
+                        <%= "圈子" %>
+                      <% } else if(tag.content[i].type ==="event") { %>
+                        <%= "活動" %>
+                      <% } %>
+                    </span>
+                    <div class="card-img-top">
+                      <% if(tag.content[i].type ==="article") { %>
+                        <a href="/articles/<%= tag.content[i]._id %>">
+                        <% var bannerImgSrc = tag.content[i].bannerImgSrc?tag.content[i].bannerImgSrc:'http://www.9emba.com/images/articles/adsf' %>
+                          <img class="img-responsive" src="<%= bannerImgSrc %>" alt="Card image cap">
+                      <% } else if(tag.content[i].type ==="chat") { %>
+                        <a href="/chats/<%= tag.content[i]._id %>">
+                          <div class="img-wrapper rounded-circle mx-auto d-block mt-4" >
+                            <% var avatarImgSrc = tag.content[i].author.avatarImgSrc?tag.content[i].author.avatarImgSrc:'/images/b1.png' %>
+                            <img src="<%= avatarImgSrc %>">
+                          </div>
+                      <% } else if(tag.content[i].type ==="group") { %>
+                        <a href="/social/groups/<%= tag.content[i]._id %>">
+                        <% var bannerImgSrc = tag.content[i].bannerImgSrc?tag.content[i].bannerImgSrc:'http://www.9emba.com/images/articles/adsf' %>
+                          <img class="img-responsive" src="<%= bannerImgSrc %>" alt="Card image cap">
+                      <% } else if(tag.content[i].type ==="event") { %>
+                        <a href="/social/events/<%= tag.content[i]._id %>">
+                        <% var bannerImgSrc = tag.content[i].bannerImgSrc?tag.content[i].bannerImgSrc:'http://www.9emba.com/images/articles/adsf' %>
+                          <img class="img-responsive" src="<%= bannerImgSrc %>" alt="Card image cap">
+                      <% } %>
+                        </a>
+                    </div>
+                    <div class="card-block card-block-sm p-2">
+                      <% if(tag.content[i].type ==="article") { %>
+                        <a href="/articles/<%= tag.content[i]._id %>" class="card-text rib-text-color-1 rib-f-size-dot8rem">
+                      <% } else if(tag.content[i].type ==="chat") { %>
+                        <a href="/chats/<%= tag.content[i]._id %>" class="card-text rib-text-color-1 rib-f-size-dot8rem">
+                      <% } else if(tag.content[i].type ==="group") { %>
+                        <a href="/social/groups/<%= tag.content[i]._id %>" class="card-text rib-text-color-1 rib-f-size-dot8rem">
+                      <% } else if(tag.content[i].type ==="event") { %>
+                        <a href="/social/events/<%= tag.content[i]._id %>" class="card-text rib-text-color-1 rib-f-size-dot8rem">
+                      <% } %>
+                      <% if(tag.content[i].type==="chat") { %>
+                        <% var regexPre = /<a[^>]*>/g,
+                               regexSuf = /<\/a>/g,
+                               rawContent = tag.content[i].content;
+                           var printContent = rawContent.replace(regexPre, '<span style="color: #0275d8;">');
+                           printContent = printContent.replace(regexSuf, '</span>');
+                        %>
+                        <%- printContent %>
+                      <% } else { %>
+                        <%= tag.content[i].title %>
+                      <% } %>  
+                        </a>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+              <% } %>        
+            </div>
+          </div>
+          <div class="tab-pane rib articles" id="article" role="tabpanel">
+            <div class="row">
+              <div class="list-group">
+                <% for(var i=0; i < tag.articles.length; i++){ %>
+                  <a href="/articles/<%= tag.articles[i]._id %>" class="list-group-item list-group-item-action">
+                    <% var bannerImgSrc = tag.articles[i].bannerImgSrc?tag.articles[i].bannerImgSrc:'http://www.9emba.com/images/articles/adsf' %>
+                    <img src="<%= bannerImgSrc %>" class="img-responsive rounded">
+                    <div class="pt-2">
+                      <small class="rib-text-color-3 rib-f-size-dot8rem rib-pt-10px">
+                      <% var d = new Date(tag.articles[i].createDate);
+                         var dFormat = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+                      %>
+                      <%= dFormat %></small>
+                      <p class="rib-text-color-1 rib-f-size-1rem"><%= tag.articles[i].title %></p>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+            </div>    
+          </div>
+          <div class="tab-pane rib chats" id="chat" role="tabpanel">
+            <div class="row">
+              <div class="list-group">
+                <% for(var i=0; i < tag.chats.length; i++){ %>
+                  <% console.log(tag.chats[i].author); %>
+                  <a href="/chats/<%= tag.chats[i]._id %>" style="text-decoration: none;">
+                    <li class="list-group-item">
+                      <div class="card">
+                        <div class="card-block rounded">
+                          <p><span class="rib-text-color-1 rib-f-size-1rem">
+                          <% var regexPre = /<a[^>]*>/g,
+                                 regexSuf = /<\/a>/g,
+                                 rawContent = tag.chats[i].content;
+                             var printContent = rawContent.replace(regexPre, '<span style="color: #0275d8;">');
+                             printContent = printContent.replace(regexSuf, '</span>');
+                          %>
+                          <%- printContent %></span></p>
+                          <div class="mb-4">
+                            <% if(tag.chats[i].tags) { %>
+                              <% for(var j = 0; j < tag.chats[i].tags.length; j++) { %>
+                                <span class="badge badge-pill rib-text-color-3 rib-mr-02rem rib-bg-tag mb-2"><%= tag.chats[i].tags[j] %></span>
+                              <% } %>
+                            <% } %>
+                          </div>
+                          <div class="chip">
+                            <% var avatarImgSrc = tag.chats[i].author.avatarImgSrc?tag.chats[i].author.avatarImgSrc:'/images/b1.png' %>
+                            <img src="<%= avatarImgSrc %>" class="rounded-circle img-fluid">
+                            <% var authorName = tag.chats[i].author.local.email.split("@")[0]; %>
+                            <span class="rib-text-color-3 rib-f-size-dot8rem"><%= authorName %></span>
+                          </div>
+                          <div class="float-right">
+                            <span class="rib-text-color-2 rib-f-size-dot8rem">
+                              <i class="fa fa-hand-o-right" aria-hidden="true"></i> <%= tag.chats[i].comments.length %> 則回覆
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li> 
+                  </a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane rib social" id="group" role="tabpanel">
+            <div class="row">
+              <div class="list-group rib-list-groups">
+                <% for(var i = 0; i < tag.groups.length; i++){ %>
+                  <a href="/social/groups/<%= tag.groups[i]._id %>" class="list-group-item list-group-item-action">
+                    <div class="card" style="min-height: 150px;">
+                      <div class="card-block rounded">
+                        <div class="media">
+                          <div class="img-wrapper d-flex rounded mr-3">
+                            <img src="<%= tag.groups[i].bannerImgSrc %>" alt="Generic placeholder image">
+                          </div>
+                          <div class="media-body">
+                          <% var isAuthor = false;
+                             var isMember = false;
+                             if(tag.groups[i].author) {
+                               if(String(user_id) === String(tag.groups[i].author)) {
+                                 isAuthor = true;
+                               }
+                             } 
+                             var members_ids = [];
+                             for(var j = 0; j < tag.groups[i].members.length; j++) {
+                               members_ids.push(String(tag.groups[i].members[j].data));
+                             }
+                             var memberIndex = members_ids.indexOf(String(user_id));
+                             if(memberIndex >= 0) {
+                               isMember = true;
+                             }
+                          %>
+                          <% if(isAuthor) { %>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= tag.groups[i].title %></p>
+                                <span class="rib-f-size-dot8rem icon-author"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                            </div>
+                          <% } else if(isMember) { %>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= tag.groups[i].title %></p>
+                                <span class="rib-f-size-dot8rem icon-collection"><i class="fa fa-user" aria-hidden="true"></i></span>
+                            </div>
+                          <% } else { %>
+                            <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= tag.groups[i].title %></p>
+                          <% } %>
+                            <p class="rib-text-color-3 rib-f-size-dot8rem rib-h-40"><%= tag.groups[i].abstract %></p>
+                            <div>
+                              <small class="rib-text-color-3 rib-f-size-dot8rem">
+                                <i class="fa fa-user pr-1" aria-hidden="true"></i><span class="rib-member-count"><%= tag.groups[i].members.length %></span>
+                                <i class="fa fa-heart pl-1 pr-1" aria-hidden="true"></i><span class="rib-like-count" data-id="<%= tag.groups[i]._id %>">0</span>
+                              </small>
+                              <% if(!isMember) { %>
+                              <button type="button" class="btn btn-collection float-right rib-list-like rib-nav-like" data-type="groups" data-id="<%= tag.groups[i]._id %>">
+                                <span class="rib-f-size-dot8rem"><i class="fa fa-heart-o pr-1" aria-hidden="true"></i>收藏</span>
+                              </button>
+                              <% } %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane rib social" id="event" role="tabpanel">
+            <div class="row">
+              <div class="list-group rib-list-events">
+                <% for(var i = 0; i < tag.events.length; i++){ %>
+                <a href="/social/events/<%= tag.events[i]._id %>" class="list-group-item list-group-item-action">
+                  <div class="card card-inverse" style="min-height: 150px;">
+                    <img class="card-img img-responsive rounded" src="<%= tag.events[i].bannerImgSrc %>" alt="Card image">
+                    <div class="card-img-overlay rounded">
+                    <% var isAuthor = false;
+                       var isParticipant = false;
+                       if(tag.events[i].author) {
+                         if(String(user_id) === String(tag.events[i].author)) {
+                           isAuthor = true;
+                         }
+                       } 
+                       var participants_ids = [];
+                       if(tag.events[i].participants) {
+                         for(var j = 0; j < tag.events[i].participants.length; j++) {
+                           if(tag.events[i].participants[j].type === "user") {
+                             if(participants_ids.indexOf(String(tag.events[i].participants[j].user._id)) == -1) {
+                               participants_ids.push(String(tag.events[i].participants[j].user._id));
+                             }
+                           } else if(tag.events[i].participants[j].type === "group") {
+                             tag.events[i].participants[j].group.members.forEach(function(member){
+                               if(participants_ids.indexOf(String(member.data)) == -1) {
+                                 participants_ids.push(String(member.data));
+                               }
+                             })
+                           }   
+                         }
+                       }
+                       var particIndex = participants_ids.indexOf(String(user_id));
+                       if(particIndex >= 0) {
+                         isParticipant = true;
+                       }
+                    %>
+                      <% if(isAuthor) { %>
+                        <div class="w-100 card-sticky-top">
+                          <span class="float-right rib-f-size-dot8rem icon-author px-2"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                        </div>
+                      <% } else if(isParticipant) { %>
+                        <div class="w-100 card-sticky-top">
+                          <span class="float-right rib-f-size-dot8rem icon-collection px-2"><i class="fa fa-user" aria-hidden="true"></i></span>
+                        </div>
+                      <% } %>
+                      <div class="w-100 card-sticky-bottom">
+                        <div class="row">
+                          <div class="col-8 pr-0">
+                            <p class="mb-0 rib-text-color-4 rib-f-size-1rem"><%= tag.events[i].title %></p>
+                          </div>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                        <% function formatDate(startDate, endDate){
+                             var start = new Date(startDate);
+                             start = new Date(start.getTime()+(3600000*8));
+                             var end = new Date(endDate);
+                             end = new Date(end.getTime()+(3600000*8));
+                             return start.getFullYear()+', '+(start.getMonth()+1)+'月'+start.getDate()+'日'+' - '+(end.getMonth()+1)+'月'+end.getDate()+'日'
+                           }
+                           var printDate = formatDate(tag.events[i].startDate, tag.events[i].endDate); %>
+                          <small class="rib-text-color-4 rib-f-size-dot8rem"><%= printDate %></small>
+                          <div>
+                            <small class="rib-text-color-4 rib-f-size-dot8rem rib-mr-02rem"><i class="fa fa-heart pr-1" aria-hidden="true"></i><span class="rib-like-count" data-id="<%= tag.events[i]._id %>">0</span></small>
+                            <% if(!isAuthor && !isParticipant) { %>
+                            <button type="button" class="btn btn-collection outline-color-4 rib-list-like rib-nav-like" data-type="events" data-id="<%= tag.events[i]._id %>">
+                              <span class="rib-f-size-dot8rem"><i class="fa fa-heart-o pr-1" aria-hidden="true"></i>收藏</span>
+                            </button>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "explore"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./../../../js/like.js"></script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+    <script src="./../../../js/count-like.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理"}); %>
+</head>
+<body class="my-2">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-3">
+        <%- include('../partial/admin-nav', {active: "overviews"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+        <p class="text-muted">儀錶板</p>
+        <h2>總覽</h2>
+        <hr/>
+        <div class="row mb-3">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">這個月的收藏總數</h4>
+              <div class="card-block">
+                <h1 class="text-primary text-center">333</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">這個月的聊天熱度</h4>
+              <div class="card-block">
+                <h1 class="text-success text-center">123</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">這個月的活動總數</h4>
+              <div class="card-block">
+                <h1 class="text-warning text-center">12</h1>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="row mb-3">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">熱門文章</h4>
+              <div class="card-block">
+                <p class="text-primary">面對真正崩盤亦無須恐懼的三個條件<i class="fa fa-heart pl-2" aria-hidden="true"></i>123</p>
+                <p class="text-success">上漲超過6年的多頭結束了？2016年第一季的恐慌殺盤是買點還是逃命點？<i class="fa fa-heart pl-2" aria-hidden="true"></i>99</p>
+                <p class="text-warning">中華職棒／中職3千萬以上大約 王柏融第6人<i class="fa fa-heart pl-2" aria-hidden="true"></i>49</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">熱門聊天室</h4>
+              <div class="card-block">
+                <p class="text-primary">我來了！ 想每天看一篇<i class="fa fa-heart pl-2" aria-hidden="true"></i>123</p>
+                <p class="text-success">早安<i class="fa fa-heart pl-2" aria-hidden="true"></i>99</p>
+                <p class="text-warning">動動腦<i class="fa fa-heart pl-2" aria-hidden="true"></i>49</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">熱門圈子</h4>
+              <div class="card-block">
+                <p class="text-primary">政大遠征隊<i class="fa fa-heart pl-2" aria-hidden="true"></i>123</p>
+                <p class="text-success">中央松青俱樂部<i class="fa fa-heart pl-2" aria-hidden="true"></i>99</p>
+                <p class="text-warning">中央俄羅斯貓<i class="fa fa-heart pl-2" aria-hidden="true"></i>49</p>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="row mb-3">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">熱門活動</h4>
+              <div class="card-block">
+                <p class="text-primary">元大盃個案分析競賽暨商管聯盟高峰會會前籌備會議<i class="fa fa-heart pl-2" aria-hidden="true"></i>123</p>
+                <p class="text-success">2017商管聯盟會員大會<i class="fa fa-heart pl-2" aria-hidden="true"></i>99</p>
+                <p class="text-warning">商管競合優勢與策略 (北部)<i class="fa fa-heart pl-2" aria-hidden="true"></i>49</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2>內容管理</h2>
+        <hr/>
+        <div class="row mb-3">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">文章</h4>
+              <div class="card-block">
+                <p class="card-text">文章的內容管理</p>
+                <a href="/admin/articles" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">聊天室</h4>
+              <div class="card-block">
+                <p class="card-text">聊天室資訊</p>
+                <a href="/admin/chats" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">圈子</h4>
+              <div class="card-block">
+                <p class="card-text">圈子的管理</p>
+                <a href="/admin/groups" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 mt-3">
+            <div class="card">
+              <h4 class="card-header">活動</h4>
+              <div class="card-block">
+                <p class="card-text">活動的管理</p>
+                <a href="/admin/events" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2>功能管理</h2>
+        <hr/>
+        <div class="row mb-3">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">頁面</h4>
+              <div class="card-block">
+                <p class="card-text">聯盟、各校宣傳頁面的管理</p>
+                <a href="#" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">標籤</h4>
+              <div class="card-block">
+                <p class="card-text">標籤統計、歸戶的管理</p>
+                <a href="/admin/tags" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">刪除</h4>
+              <div class="card-block">
+                <p class="card-text">刪除物件管理</p>
+                <a href="/admin/delete" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2>用戶管理</h2>
+        <hr/>
+        <div class="row">
+          <div class="col-sm-12 col-md-4">
+            <div class="card">
+              <h4 class="card-header">帳號</h4>
+              <div class="card-block">
+                <p class="card-text">網站帳號管理</p>
+                <a href="/admin/users" class="btn btn-primary">前往</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+</body>
+</html>

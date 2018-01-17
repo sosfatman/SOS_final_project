@@ -1,0 +1,37 @@
+<li class="list-group-item">
+    <div class="card">
+      <div class="card-block rounded">
+        <p class="rib-mb-05rem"><span class="rib-text-color-1 rib-f-size-1rem"><%- data.content %></span></p>
+        <div class="mb-4">
+          <% if(data.comments) { %>
+            <% if(data.tags) { %>
+              <% for(var i=0; i<data.tags.length; i++) { %>
+                <a href="/explore/<%= data.tags[i] %>">
+                  <span class="badge badge-pill rib-text-color-3 rib-mr-02rem rib-bg-tag mb-2"><%= data.tags[i]%></span>
+                </a>
+              <% } %>
+            <% } %>
+          <% } %>
+        </div>
+        <a href="/profile/<%= data.author.id %>">
+          <div class="chip">
+          <% var avatarImgSrc = data.author.avatarImgSrc?data.author.avatarImgSrc:'/images/b1.png' %>
+            <img src="<%= avatarImgSrc %>" class="rounded-circle img-fluid" />
+            <% var name = data.author.local.email.split("@")[0]; %>
+            <span class="rib-text-color-3 rib-f-size-dot8rem"><%= name %></span>
+          </div>
+        </a>
+        <div class="float-right">
+          <% if(data.comments) {%>
+            <span class="rib-text-color-2 rib-f-size-dot8rem">
+              <% if(data.comments.length>0) { %>
+              <i class="fa fa-hand-o-right" aria-hidden="true"></i> <%= data.comments.length %>則回覆
+            <% } else { %>
+              <%= "尚未有回覆喔！" %>
+            <% } %>
+            </span>
+          <% } %>
+        </div>
+      </div>
+    </div>
+</li>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-社群"}); %>
+</head>
+<body data-id="<%= event._id %>" data-type="events" class="event-node-page">
+
+    <div class="main-wrapper mb-5 rib social">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded text-center">
+          <button class="btn btn-outline-secondary float-left rib-nav-back" style="width: 50px">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <span class="navbar-text text-muted pb-0" style="display:inline-block;width:65%;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;"><%= event.title %></span>
+          <% if(isAuthor) { %>
+          <a role="button" class="float-right" href="/social/events/edit/<%= event._id %>" id="editBtn"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+          <% } else { %>
+          <button data-id="<%= event._id %>"  class="btn btn-collection color-4 float-right rib-nav-like rib-nav-btn" style="width: 50px">
+            <i class="fa fa-heart-o rib-f-size-1rem" aria-hidden="true"></i>
+          </button>
+          <% } %>
+        </div>
+      </nav>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/social/events/<%= event._id %>?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-inverse mt-5" style="min-height: 150px;">
+        <img class="card-img img-responsive" src="<%= event.bannerImgSrc %>" alt="Card image">
+        <div class="card-img-overlay">
+          <!--div class="w-100 card-sticky-top px-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <a role="button" class="float-right" href="/social/events/edit/<%= event._id %>" id="editBtn"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+                </div>
+              </div>
+            </div>
+          </div-->
+          <div class="w-100 card-sticky-bottom px-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <p class="mb-0 rib-text-color-4 rib-f-size-1rem"><%= event.title %></p>
+                  <% function formatDate(startDate, endDate){
+                     var start = new Date(startDate);
+                     start = new Date(start.getTime()+(3600000*8));
+                     var end = new Date(endDate);
+                     end = new Date(end.getTime()+(3600000*8));
+                     return start.getFullYear()+', '+(start.getMonth()+1)+'月'+start.getDate()+'日'+' - '+(end.getMonth()+1)+'月'+end.getDate()+'日'
+                     }
+                     var printDate = formatDate(event.startDate, event.endDate); %>
+                  <p class="rib-text-color-4 rib-f-size-dot8rem pt-1 mb-0"><%= printDate %></p>
+                  <p class="rib-text-color-4 rib-f-size-dot8rem pt-1 mb-0"><i class="fa fa-map-marker pr-1" aria-hidden="true"></i><%= event.address %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rib-bg-card">
+        <div class="container">
+          <div class="row py-3">
+            <div class="col-12 pt-3">
+              <p class="rib-text-color-1 rib-f-size-1rem"><%- event.abstract %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-file-o pr-1" aria-hidden="true"></i>活動內容</span>
+          </div>
+          <div class="col-12">
+            <p class="rib-text-color-1 rib-f-size-1rem"><%- event.content %></p>
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-users pr-1" aria-hidden="true"></i>參與對象</span>
+          </div>
+        </div>
+        <div class="row">
+        <% if(event.participants) { %>
+        <% for(var i = 0; i < event.participants.length; i++) { %>
+          <div class="col-4 col-md-2 mb-1">
+          <% var url, imgSrc, title; 
+             if(event.participants[i].type === "user"){
+               url = "/profile/"+event.participants[i].user._id;
+               imgSrc = event.participants[i].user.avatarImgSrc;
+               title = (event.participants[i].user.name)?event.participants[i].user.name:event.participants[i].user.local.email;
+             } else if(event.participants[i].type === "group"){
+               url = "/social/groups/"+event.participants[i].group._id;
+               imgSrc = event.participants[i].group.bannerImgSrc;
+               title = event.participants[i].group.title;
+             }
+          %>
+            <a href="<%= url %>">
+              <div class="card">
+                <div class="card-img-top rounded mx-auto" style="height: 95px; width: 95px; overflow: hidden;">
+                  <img class="" src="<%= imgSrc %>" alt="Card image cap" style="height: 95px; width:auto">
+                </div>
+                <div class="card-block p-2">
+                  <p class="card-text text-center rib-text-color-1 rib-f-size-dot8rem"><%= title %></p>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% } %>
+        <% } %>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-tag pr-1" aria-hidden="true"></i>Tags</span>
+          </div>
+          <div class="col-12">
+          <% if(event.tags) { %>
+            <% for(var i = 0; i < event.tags.length; i++) { %>
+              <a href="/explore/<%= event.tags[i] %>">
+                <span class="badge badge-pill rib-text-color-3 ml-1 mb-2 rib-bg-tag"><%= event.tags[i]%></span>
+              </a>
+            <% } %>
+          <% } %>
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-heart pr-1" aria-hidden="true"></i><%= favUsers.length %></span>
+          </div>
+          <div class="col-12 pr-0">
+            <div class="d-flex flex-row" style="overflow-x: auto;">
+              <% for(var i=0 ; i< favUsers.length; i++) { %>
+                <div class="p-2">
+                  <div class="img-wrapper rounded-circle">
+                    <a href="/profile/<%= favUsers[i]._id %>">
+                      <img src="<%=  favUsers[i].avatarImgSrc %>">
+                    </a>
+                  </div>
+                  <p class="text-center rib-text-color-1 rib-f-size-dot8rem pt-3"><%= favUsers[i].name %></p>
+                </div>
+              <% } %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "social"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./../../../js/like.js"></script>
+    <script src="./../../../js/chats.js"></script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+</body>
+</html>

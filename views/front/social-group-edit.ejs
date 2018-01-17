@@ -1,0 +1,160 @@
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-編輯圈子"}); %>
+</head>
+<body data-nodeId="<%= node._id %>" data-type="groups" class="group-edit-page">
+  <div class="main-wrapper mb-5 rib social">
+    <nav class="navbar navbar-light bg-faded fixed-top">
+      <div class="bg-faded clearfix text-center">
+        <a href="/social/groups/<%= node._id %>" class="btn btn-outline-secondary float-left" style="width: 50px">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </a>
+        <span class="navbar-text text-muted">
+          編輯圈子
+        </span>
+        <input
+          id="edit-group-submit"
+          class="btn btn-outline-secondary float-right"
+          style="width: 50px; border-color: transparent"
+          form="edit-group-form"
+          value="完成"
+          type="submit"/>
+      </div>
+    </nav>
+    <div class="card card-inverse mt-5">
+      <img class="card-img img-responsive" id="banner-picture" src="<%= node.bannerImgSrc %>" alt="Card image">
+      <div class="card-img-overlay bg-unset">
+        <div class="w-100 card-sticky-bottom px-0">
+          <div class="container">
+            <div class="row" style="height: 33.6px;">
+              <div class="col-12">
+                <button class="btn btn-camera float-right" type="button" style="border: 1px solid #e6e6e6;"  data-toggle="collapse" data-target="#upload-collapse" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-camera" aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-12">
+            <div class="collapse mb-2" id="upload-collapse">
+              <div class="card card-block" style="border: 1px solid rgba(0,0,0,.125);">
+                <h5 class="card-title rib-text-color-2">圖片上傳</h5>
+                <form id="upload-image-form" action="/images/upload/group/<%= node._id %>" method="post" enctype="multipart/form-data" class="mb-0" data-node-type="group">
+                  <div class="form-group rib-f-size-dot8rem">
+                    <input type="file" class="form-control-file mb-2" name="groupPhoto" aria-describedby="fileHelp" accept="image/*">
+                    <span>* 圖片大小限制為3MB以下</span>  
+                  </div>
+                  <input type="submit" class="btn btn-collection float-right" value="上傳">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form id="edit-group-form" data-toggle="validator">
+          <input class="form-input-bannerImgSrc" type="hidden" value="<%= node.bannerImgSrc %>">
+          <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label rib-f-size-dot8rem rib-text-color-3">名稱</label>
+            <div class="col-10">
+              <input class="form-control form-input-title" type="text" placeholder="輸入圈子的名稱" id="example-text-input" style="border: unset; border-bottom: 1px solid #e6e6e6;" value="<%= node.title %>" required>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleTextarea" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">簡介</label>
+            <div class="col-12">
+              <textarea class="form-control count-char form-input-abstract" id="exampleTextarea" rows="2" maxlength="50" required><%= node.abstract %></textarea>
+              <span class="char-counter float-right rib-f-size-dot8rem rib-text-color-3"></span>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleTextarea" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">詳細介紹</label>
+            <div class="col-12">
+              <textarea class="form-control count-char form-input-content" id="exampleTextarea" rows="5" maxlength="500"><%= node.content %></textarea>
+              <span class="char-counter float-right rib-f-size-dot8rem rib-text-color-3"></span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12 mb-2 ribo-badge-container" id="ribo-leader-list">
+              <%if (node.members.length > 0) { %>
+                <% for(var i = 0; i < node.members.length; i++) {%>
+                <%if (node.members[i].isLeader) { %>
+                  <span class="badge badge-pill rib-text-color-3 mr-2 rib-bg-tag" id="<%= node.members[i].data._id %>">
+                  <% if(node.members[i].data.name===""||node.members[i].data.name==="undefined"||node.members[i].data.name===" ") { %>
+                    <%= node.members[i].data.local.email %>
+                  <% } else { %>
+                    <%= node.members[i].data.name %>
+                  <% } %><i class="fa fa-times member-delete-icon" aria-hidden="true"></i>
+                  </span>
+                   <input type="hidden" name="leaderArray[]" value="<%= node.members[i].data._id %>">
+                <% } %>
+                <% } %>
+              <% } %>
+            </div>
+            <label for="leader" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">新增隊長</label>
+            <div class="col-12 input-group">
+              <input type="text" class="form-control typeahead form-input-leaders" id="search-input" placeholder="" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12 mb-2 ribo-badge-container" id="ribo-member-list">
+              <%if (node.members.length > 0) { %>
+                <% for(var i=0; i<node.members.length; i++) {%>
+                <%if (!node.members[i].isLeader) { %>
+                  <span class="badge badge-pill rib-text-color-3 mr-2 rib-bg-tag" id="<%= node.members[i].data._id %>">
+                  <% if(node.members[i].data.name===""||node.members[i].data.name==="undefined"||node.members[i].data.name===" ") { %>
+                    <%= node.members[i].data.local.email %>
+                  <% } else { %>
+                    <%= node.members[i].data.name %>
+                  <% } %><i class="fa fa-times member-delete-icon" aria-hidden="true"></i>
+                  </span>
+                   <input type="hidden" name="memberArray[]" value="<%= node.members[i].data._id %>">
+                <% } %>
+                <% } %>
+              <% } %>
+            </div>
+            <label for="member" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">邀請成員</label>
+            <div class="col-12 input-group">
+              <input type="text" class="form-control typeahead form-input-members" id="search-input" placeholder="" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12 mb-2 ribo-tag-list">
+              <%if (node.tags) { %>
+                <% for(var i=0; i<node.tags.length; i++) {%>
+                  <span class="badge badge-pill rib-text-color-3 mr-2 rib-bg-tag"><%= node.tags[i] %><i class="fa fa-times tag-delete-icon" aria-hidden="true"></i></span>
+                  <input type="hidden" name="tagArray[]" value="<%= node.tags[i] %>">
+                <% } %>
+              <% } %>
+            </div> 
+            <label for="exampleInputTags" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">Tags</label>
+            <div class="col-12 input-group">
+              <input type="text" class="form-control form-input-tags" placeholder="">
+              <span class="input-group-btn">
+                <button class="btn btn-collection input-tags-btn" type="button"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script src="./../../../js/front/tags.js"></script>
+    <script src="./../../../js/front/count-char.js"></script>
+    <script src="./../../../js/front/invite-user.js"></script>
+    <script src="./../../../js/groups.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script src="./../../../js/upload-image.js"></script>
+</body>
+</html>

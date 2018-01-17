@@ -1,0 +1,14 @@
+<img src="/images/9EMBA-LOGO-64x64.png" class="mb-1 mt-2" />
+<nav class="nav flex-column">
+  <h6 class="header text-uppercase">儀錶板</h6>
+  <a class="nav-link <% if(active=="overviews") { %> active <% } %>" href="/admin">總覽</a>
+  <a class="nav-link <% if(active=="articles") { %> active <% } %>" href="/admin/articles">文章管理</a>
+  <a class="nav-link <% if(active=="chats") { %> active <% } %>" href="/admin/chats">聊天室管理</a>
+  <a class="nav-link <% if(active=="groups") { %> active <% } %>" href="/admin/groups">圈子管理</a>
+  <a class="nav-link <% if(active=="events") { %> active <% } %>" href="/admin/events">活動管理</a>
+  <a class="nav-link <% if(active=="tags") { %> active <% } %>" href="/admin/tags">標籤管理</a>
+  <a class="nav-link <% if(active=="users") { %> active <% } %>" href="/admin/users">帳戶管理</a>
+  <h6 class="header text-uppercase">更多</h6>
+  <a class="nav-link <% if(active=="delete") { %> active <% } %>" href="/admin/delete">刪除管理</a>
+  <a class="nav-link <% if(active=="log") { %> active <% } %>" href="#">Log資料</a>
+</nav>

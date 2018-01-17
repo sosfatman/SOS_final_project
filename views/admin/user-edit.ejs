@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理-文章編輯頁"}); %>
+</head>
+<body data-nodeid="<%= node._id %>" data-type="users">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <%- include('../partial/admin-nav', {active: "users"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+      <%- include('../partial/breadcrum', {items: [
+          {href: "/admin",name: "管理主頁"},
+          {href: "/admin/articles",name: "帳戶列表頁"},
+          {name: "帳戶編輯頁"}
+          ]}); %>
+        <h2>帳戶編輯頁</h2>
+        <hr/>
+
+        <form id="user-node-form" method="post" action="/api/users/<%= node._id %>">
+          <div class="form-group">
+            <label for="name">名字</label>
+            <input name="name" type="text" class="form-control" value="<%= node.name %>" id="node-form-name" placeholder="輸入名字" />
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea">簡介</label>
+            <textarea name="intro" class="form-control" id="node-form-intro" rows="8"><%= node.intro %></textarea>
+          </div>
+          <div class="form-group">
+            <label for="avatarImgSrc">大頭貼</label>
+            <input name="avatarImgSrc" type="text" class="form-control" value="<%= node.avatarImgSrc %>" id="node-form-avatarImgSrc" placeholder="輸入路徑" />
+          </div>
+          <div class="form-group">
+            <label for="school">學校</label>
+            <input name="school" type="text" class="form-control" value="<%= node.school %>" id="node-form-school" placeholder="輸入學校" />
+          </div>
+          <div class="form-group">
+            <label for="department">科系</label>
+            <input name="department" type="text" class="form-control" value="<%= node.department %>" id="node-form-department" placeholder="輸入科系" />
+          </div>
+          <div class="form-group">
+            <label for="position">職稱</label>
+            <input name="position" type="text" class="form-control" value="<%= node.position %>" id="node-form-position" placeholder="輸入職稱" />
+          </div>
+
+          <div style="text-align: right;">
+            <button type="submit" data-type="user" data-id="<%= node._id %>" class="btn btn-outline-primary rib-btn-save">儲存</button>
+            <button type="button" data-type="user" data-id="<%= node._id %>" class="btn btn-outline-danger rib-btn-delete">刪除</button>
+          </div>
+          <div class="form-group">
+            <label for="title">創立時間</label>
+            <% var d = new Date(node.createdDate);
+               var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+            %>
+            <input class="form-control" id="disabledInput" type="text" value="<%= dFormat %>" placeholder="2017/01/04" disabled>
+          </div>
+        </form>
+        <div class="row">
+          <% var favList=node.favArticles; var urlPrefix="articles"  %>
+          <% if(favList.length>0) {%>
+            <div class="col-md-12">
+              <h4>文章收藏列表 <span class="badge badge-default"><%= favList.length %></span></h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>收藏時間</th>
+                    <th>標題</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0; i<favList.length; i++) { %>
+                    <% var favitem=favList[i] %>
+                    <tr>
+                      <th scope="row"><%= i+1 %></th>
+                      <% var d = new Date(favitem.createdDate);
+                         var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                      %>
+                      <td><%= dFormat %></td>
+                      <td><a href="/<%= urlPrefix %>/<%= favitem.node._id %>"><%= favitem.node.title %></a></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+          <% var favList=node.favChats; var urlPrefix="chats" %>
+          <% if(favList.length>0) {%>
+            <div class="col-md-12">
+              <h4>聊天室收藏列表 <span class="badge badge-default"><%= favList.length %></span></h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>收藏時間</th>
+                    <th>標題</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0; i<favList.length; i++) { %>
+                    <% var favitem=favList[i] %>
+                    <tr>
+                      <th scope="row"><%= i+1 %></th>
+                      <% var d = new Date(favitem.createdDate);
+                         var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                      %>
+                      <td><%= dFormat %></td>
+                      <td><a href="/<%= urlPrefix %>/<%= favitem.node._id %>"><%= favitem.node.title %></a></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+          <% var favList=node.favGroups; var urlPrefix="groups" %>
+          <% if(favList.length>0) {%>
+            <div class="col-md-12">
+              <h4>圈子收藏列表 <span class="badge badge-default"><%= favList.length %></span></h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>收藏時間</th>
+                    <th>標題</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0; i<favList.length; i++) { %>
+                    <% var favitem=favList[i] %>
+                    <tr>
+                      <th scope="row"><%= i+1 %></th>
+                      <% var d = new Date(favitem.createdDate);
+                         var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                      %>
+                      <td><%= dFormat %></td>
+                      <td><a href="/<%= urlPrefix %>/<%= favitem.node._id %>"><%= favitem.node.title %></a></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+          <% var favList=node.favEvents; var urlPrefix="events" %>
+          <% if(favList.length>0) {%>
+            <div class="col-md-12">
+              <h4>活動收藏列表 <span class="badge badge-default"><%= favList.length %></span></h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>收藏時間</th>
+                    <th>標題</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0; i<favList.length; i++) { %>
+                    <% var favitem=favList[i] %>
+                    <tr>
+                      <th scope="row"><%= i+1 %></th>
+                      <% var d = new Date(favitem.createdDate);
+                         var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                      %>
+                      <td><%= dFormat %></td>
+                      <td><a href="/<%= urlPrefix %>/<%= favitem.node._id %>"><%= favitem.node.title %></a></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+  <!-- <script src="./../../../js/admin/tags.js"></script>
+  <script src="./../../../js/admin/admin-form.js"></script>
+  <script src="./../../../js/admin/delete-node.js"></script> -->
+</body>
+</html>

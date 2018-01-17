@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-個人主頁"}); %>
+</head>
+  <body class="personal-profile-page">
+
+    <div class="main-wrapper mb-5">
+      <div class="rib profile header">
+        <div class="card card-inverse">
+          <img class="card-img img-responsive" src="<%= user.avatarImgSrc %>" alt="Card image">
+          <div class="card-img-overlay">
+          <button class="btn btn-outline-secondary float-left rib-nav-back" style="width: 50px; position: absolute; left: 10px; top: 15px;">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <% if(isAuthor) { %>
+            <a role="button" class="float-right" href="/profile/edit"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+          <% } %>
+            <div class="img-wrapper rounded-circle mx-auto d-block mt-5">
+              <img id="profile-picture" src="<%= user.avatarImgSrc %>">
+            </div>
+            <p class="text-center rib-text-color-4 rib-f-size-1rem pt-3"><%= user.name %></p>
+            <div class="col-8 offset-2">
+              <p class="text-center rib-text-color-4 rib-f-size-dot8rem"><%= user.intro %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% if(message.successMessage) { %>
+        <div class="alert rib-bg-color-2 rib-text-color-4 alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong><%= message.successMessage %></strong>
+        </div>      
+      <% } %>
+      <% if(message.errorMessage) { %>
+        <div class="alert rib-bg-color-5 rib-text-color-4 alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong><%= message.errorMessage %></strong>
+        </div>      
+      <% } %>
+      <div class="rib profile my-1">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active text-center rib-text-color-3" data-toggle="tab" href="#article" role="tab">
+            <p class="rib-text-color-1 rib-f-size-dot8rem mb-0"><%= user.favArticles.length %></p>
+            <p class="rib-text-color-3 rib-f-size-dot8rem mb-1">文章</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-center rib-text-color-3" data-toggle="tab" href="#chat" role="tab">
+            <p class="rib-text-color-1 rib-f-size-dot8rem mb-0"><%= user.favChats.length %></p>
+            <p class="rib-text-color-3 rib-f-size-dot8rem mb-1">聊天室</p></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-center rib-text-color-3" data-toggle="tab" href="#group" role="tab">
+            <p class="rib-text-color-1 rib-f-size-dot8rem mb-0"><%= user.favGroups.length %></p>
+            <p class="rib-text-color-3 rib-f-size-dot8rem mb-1">圈子</p></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-center" data-toggle="tab" href="#event" role="tab">
+            <p class="rib-text-color-1 rib-f-size-dot8rem mb-0"><%= user.favEvents.length %></p>
+            <p class="rib-text-color-3 rib-f-size-dot8rem mb-1">活動</p></a>
+          </li>
+        </ul>
+      </div>
+      <div class="container profile">
+        <div class="row">
+          <div class="tab-content">
+            <div class="tab-pane active rib articles" id="article" role="tabpanel">
+              <div class="list-group">
+                <% for(var i = 0; i < user.favArticles.length; i++){ %>
+                  <a href="/articles/<%= user.favArticles[i].node._id %>" class="list-group-item list-group-item-action">
+                    <% var bannerImgSrc = user.favArticles[i].node.bannerImgSrc?user.favArticles[i].node.bannerImgSrc:'/images/articles/'+user.favArticles[i].node._id %>
+                    <img src="<%= bannerImgSrc %>" class="img-responsive rounded">
+                    <div class="pt-2">
+                      <small class="rib-text-color-3 rib-f-size-dot8rem rib-pt-10px">
+                      <% var d = new Date(user.favArticles[i].createdDate);
+                         var dFormat = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+                      %>
+                      <%= dFormat %></small>
+                      <p class="rib-text-color-1 rib-f-size-1rem"><%= (user.favArticles[i].node)?user.favArticles[i].node.title: ""%></p>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+            <div class="tab-pane rib chats" id="chat" role="tabpanel">
+              <div class="list-group">
+                <% for(var i=0; i < user.favChats.length; i++) { %>
+                <% if(user.favChats[i].node) { %>
+                <% if(user.favChats[i].node.comments) { %>
+                 <a href="/chats/<%= user.favChats[i].node._id %>" style="text-decoration: none;">
+                <% } %>
+                <% } %>
+                  <li class="list-group-item">
+                    <div class="card">
+                      <div class="card-block rounded">
+                        <p><span class="rib-text-color-1 rib-f-size-1rem">
+                        <% var regexPre = /<a[^>]*>/g,
+                               regexSuf = /<\/a>/g,
+                               rawContent = user.favChats[i].node.content;
+                           var printContent = rawContent.replace(regexPre, '<span style="color: #0275d8;">');
+                           printContent = printContent.replace(regexSuf, '</span>');
+                        %>
+                        <%- printContent %></span></p>
+                        <div class="mb-4">
+                            <% if(user.favChats[i].node.tags) { %>
+                              <% for(var j = 0; j < user.favChats[i].node.tags.length; j++) { %>
+                                <span class="badge badge-pill rib-text-color-3 rib-mr-02rem rib-bg-tag mb-2"><%= user.favChats[i].node.tags[j]%></span>
+                              <% } %>
+                            <% } %>
+                          </div>
+                        <div class="chip">
+                          <% var avatarImgSrc = user.favChats[i].node.author.avatarImgSrc?user.favChats[i].node.author.avatarImgSrc:'/images/b1.png' %>
+                          <img src="<%= avatarImgSrc %>" class="rounded-circle img-fluid">
+                          <% var name = user.favChats[i].node.author.local.email.split("@")[0]; %>
+                          <span class="rib-text-color-3 rib-f-size-dot8rem"><%= name %></span>
+                        </div>
+                        <div class="float-right">
+                          <span class="rib-text-color-2 rib-f-size-dot8rem">
+                            <i class="fa fa-hand-o-right" aria-hidden="true"></i> <%= user.favChats[i].node.comments.length %> 則回覆
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <% if(user.favChats[i].node.comments) {%>
+                  </a>
+                  <% } %>
+                <% } %>
+              </div>
+            </div>
+            <div class="tab-pane rib social" id="group" role="tabpanel">
+              <div class="list-group  rib-list-groups">
+                <% for(var i=0; i<user.favGroups.length; i++){ %>
+                  <a href="/social/groups/<%= user.favGroups[i].node.id %>" class="list-group-item list-group-item-action">
+                    <div class="card">
+                      <div class="card-block rounded">
+                        <div class="media">
+                          <div class="img-wrapper d-flex rounded mr-3">
+                            <img src="<%= user.favGroups[i].node.bannerImgSrc %>" alt="Generic placeholder image" />
+                          </div>
+                          <div class="media-body">
+                            <div class="d-flex w-100 justify-content-between">
+                              <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= user.favGroups[i].node.title %></p>
+                              <span class="rib-f-size-dot8rem icon-collection px-2"><i class="fa fa-user" aria-hidden="true"></i></span>
+                            </div>
+                            <p class="rib-text-color-3 rib-f-size-dot8rem pt-1 rib-h-40"><%= user.favGroups[i].node.abstract %></p>
+                            <div>
+                              <small class="rib-text-color-3 rib-f-size-dot8rem">
+                                <i class="fa fa-user pr-1" aria-hidden="true"></i><%= user.favGroups[i].node.members.length %>
+                                <i class="fa fa-heart pl-1 pr-1" aria-hidden="true"></i><span class="rib-like-count" data-id="<%= user.favGroups[i].node.id %>">0</span>
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+            <div class="tab-pane rib social" id="event" role="tabpanel">
+              <div class="list-group  rib-list-events">
+                <% for(var i=0; i<user.favEvents.length; i++){ %>
+                  <a href="/social/events/<%= user.favEvents[i].node.id %>" class="list-group-item list-group-item-action">
+                    <div class="card card-inverse">
+                      <img class="card-img img-responsive rounded" src="<%= user.favEvents[i].node.bannerImgSrc %>" alt="Card image">
+                      <div class="card-img-overlay rounded">
+                        <div class="w-100 card-sticky-top">
+                          <span class=" float-right rib-f-size-dot8rem icon-collection px-2"><i class="fa fa-user" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="w-100 card-sticky-bottom">
+                          <div class="row">
+                            <div class="col-8 pr-0">
+                              <p class="mb-0 rib-text-color-4 rib-f-size-1rem"><%= user.favEvents[i].node.title %></p>
+                            </div>
+                          </div>
+                          <div class="d-flex w-100 justify-content-between">
+                          <% function formatDate(startDate, endDate){
+                             var start = new Date(startDate);
+                             start = new Date(start.getTime()+(3600000*8));
+                             var end = new Date(endDate);
+                             end = new Date(end.getTime()+(3600000*8));
+                             return start.getFullYear()+', '+(start.getMonth()+1)+'月'+start.getDate()+'日'+' - '+(end.getMonth()+1)+'月'+end.getDate()+'日'
+                           }
+                           var printDate = formatDate(user.favEvents[i].node.startDate, user.favEvents[i].node.endDate); %>
+                            <small class="rib-text-color-4 rib-f-size-dot8rem"><%= printDate %></small>
+                            <div>
+                              <small class="rib-text-color-4 rib-f-size-dot8rem"><i class="fa fa-heart pr-1" aria-hidden="true"></i><span class="rib-like-count" data-id="<%= user.favEvents[i].node.id %>">0</span></small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "profile"}); %>
+
+    <script src="./../../../js/profile.js"></script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+    <script src="./../../../js/count-like.js"></script>
+  </body>
+</html>

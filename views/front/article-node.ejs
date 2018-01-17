@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-主頁"}); %>
+</head>
+<body data-id="<%= article._id %>" data-type="articles" class="article-node-page">
+
+    <div class="main-wrapper mb-5 rib articles">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded text-center">
+          <button class="btn btn-outline-secondary float-left rib-nav-back" style="width: 50px">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <span class="rib-text-color-2">
+            9
+          </span>
+          <span class="navbar-text text-muted">
+            EMBA
+          </span>
+          <button type="articles" data-id="<%= article._id %>" data-likeStatus="<% if(isLike){ %>true<% }else{ %>false<% } %>" class="btn btn-collection color-4 float-right rib-nav-like rib-nav-btn" style="width: 50px">
+            <i class="fa fa-heart-o rib-f-size-1rem" aria-hidden="true"></i>
+          </button>
+        </div>
+      </nav>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/articles/<%= article._id %>?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5" style="margin-bottom:100px">
+        <div class="row">
+        <div class="w-100">
+          <img class="mb-3 img-responsive" src="<%= article.bannerImgSrc %>" alt="">
+        </div>
+          <div class="col-12">
+            <h3><%= article.title %></h3>
+            <p class="mb-2 rib-text-color-3 rib-f-size-dot8rem">
+            <% var d = new Date(article.createdDate);
+               var dFormat = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+            %>
+            <%= dFormat %></p>
+            <% if (article.tags) { %>
+              <% for(var i=0; i<article.tags.length; i++) {%>
+                <a href="/explore/<%= article.tags[i] %>">
+                  <span class="badge badge-pill rib-text-color-3 mr-1 mb-2" style="background-color: #efefef; padding: 8px 12px"><%= article.tags[i] %></span>
+                </a>
+              <% } %>
+            <% } %>
+            <p class="mt-3 rib-text-color-1 rib-f-size-1rem"><%- article.content %></p>
+            <div class="mx-auto" style="width: 133px;">
+              <a id="full-article-btn" class="btn btn-collection btn-lg" role="button" href="<%= article.link %>">完整閱讀</a>
+              <!--a class="btn btn-primary" href=<%= article.link %> role="button">完整閱讀</a-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <iframe id="full-article" src="<%= article.link %>" style="width:100%;height:85vh;display:none;margin-top:-45px;" frameborder="0"></iframe>
+
+    <%- include('../partial/footer', {active: "articles"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./../../../js/like.js"></script>
+    <script>
+      //當閱讀全文按鈕被按下時，改變回上一頁的行為，還有切換顯示原始來源文章的iframe
+      jQuery("#full-article-btn").click(function(){
+        $(".main-wrapper .container").hide();
+        $("#full-article").show();
+        $(".rib-nav-back").click(function(){
+          //window.location.replace("/articles/<%= article.id %>");
+          setTimeout(function(){ location.reload(); }, 200);
+        });
+      });
+    </script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+</body>
+</html>

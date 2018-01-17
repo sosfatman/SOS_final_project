@@ -1,0 +1,53 @@
+.rib-color-green {
+  color: #24c6bd;
+}
+.rib-color-gray-dark {
+  color: #535353;
+}
+.rib-color-gray-light {
+  color: #9E9F9F;
+}
+.rib-bg-gray {
+  background-color: #F7F8F8;
+}
+.rib-footer-gray {
+  background-color: #535353;
+}
+.h-100px {
+  height: 150px;
+}
+.h-120px {
+  height: 120px;
+}
+.landing-page .banner-section.jumbotron {
+  background: url("/images/fangstudent.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  margin-bottom: 0px;
+}
+.landing-page .btn-outline-primary {
+  color: #24c6bd;
+  border-color: #24c6bd;
+  border-radius: 5rem;
+  font-size: 1rem;
+  padding: 0.75rem 2.5rem;
+}
+.landing-page .btn-outline-primary:hover {
+  background-color: #24c6bd;
+  color: #fff;
+}
+.landing-page .gain-section .image-div{
+  width:150px;
+  height: 150px;
+  overflow:hidden;
+}
+.landing-page .advice-section.jumbotron {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/images/landing/黃金健議_滾動視差.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  margin-bottom: 0px;
+}

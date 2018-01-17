@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-聊天室"}); %>
+</head>
+<body data-id="<%= chat._id %>" data-type="chats" class="chat-node-page">
+
+  <div class="main-wrapper mb-5 rib chats">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded text-center">
+          <button class="btn btn-outline-secondary float-left rib-nav-back" style="width: 50px">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <span class="navbar-text text-muted">
+            聊天室
+          </span>
+          <% if(isAuthor) { %>
+          <a role="button" class="float-right" href="/chats/edit/<%= chat._id %>" id="editBtn"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+          <% } else { %>
+          <button data-id="<%= chat._id %>" data-likeStatus="<% if(isLike){ %>true<% }else{ %>false<% } %>" class="btn btn-collection color-4 float-right rib-nav-like rib-nav-btn" style="width: 50px">
+            <i class="fa fa-heart-o rib-f-size-1rem" aria-hidden="true"></i>
+          </button>
+          <% } %>
+        </div>
+      </nav>
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能回覆喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <button type="button" id="loginBtn" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/chats/<%= chat._id %>?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5">
+        <div class="row pt-1">
+          <!--div class="col-12">
+            <a role="button" class="float-right" href="/chats/edit/<%= chat._id %>" id="editBtn"><span class="rib-text-color-3"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+          </div-->
+          <div class="list-group">
+            <%- include('../partial/chat-block', {data: chat}); %>
+          </div>
+          <span class="pl-4 mt-3 rib-text-color-3 rib-f-size-dot8rem">全部回覆</span>
+          <div class="list-group comments">
+            <% for(var i = 0; i < chat.comments.length; i++) {%>
+              <%- include('../partial/chat-block', {data: chat.comments[i]}); %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar fixed-bottom navbar-light bg-faded rib footer">
+      <div class="input-group">
+        <input type="text" class="form-control rounded send-message-input" placeholder="輸入訊息...">
+        <span class="input-group-btn">
+          <button class="btn btn-secondary rib-text-color-3 rib-message-send-btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+        </span>
+      </div>
+    </nav>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="./../../../js/like.js"></script>
+    <script src="./../../../js/chats.js"></script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+</body>
+</html>

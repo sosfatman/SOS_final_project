@@ -1,0 +1,207 @@
+<html>
+<head>
+  <%- include('../partial/header', {title: "9EMBA-編輯活動"}); %>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+</head>
+<body data-nodeId="<%= node._id %>" data-type="events" class="event-edit-page">
+  <div class="main-wrapper mb-5 rib social">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded clearfix text-center">
+          <a href="/social/events/<%= node._id %>" class="btn btn-outline-secondary float-left" style="width: 50px">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </a>
+          <span class="navbar-text text-muted">
+          編輯活動
+          </span>
+          
+          <input
+              id="edit-event-submit"
+              class="btn btn-outline-secondary float-right"
+              style="width: 50px; border-color: transparent"
+              form="edit-event-form"
+              value="完成"
+              type="submit"/>
+        </div>
+      </nav>
+      <div class="card card-inverse mt-5">
+        <img class="card-img img-responsive" id="banner-picture" src="<%= node.bannerImgSrc %>" alt="Card image">
+        <div class="card-img-overlay bg-unset">
+          <div class="w-100 card-sticky-bottom px-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <button class="btn btn-camera float-right" type="button" style="border: 1px solid #e6e6e6;"  data-toggle="collapse" data-target="#upload-collapse" aria-expanded="false" aria-controls="collapseExample" id="active-upload"><i class="fa fa-camera" aria-hidden="true"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-12">
+            <div class="collapse mb-2" id="upload-collapse">
+              <div class="card card-block" style="border: 1px solid rgba(0,0,0,.125);">
+                <h5 class="card-title rib-text-color-2">圖片上傳</h5>
+                <form id="upload-image-form" action="/images/upload/event/<%= node._id %>" method="post" enctype="multipart/form-data" class="mb-0" data-node-type="event">
+                  <div class="form-group rib-f-size-dot8rem">
+                    <input type="file" class="form-control-file mb-2" name="eventPhoto" aria-describedby="fileHelp" accept="image/*">
+                    <span>* 圖片大小限制為3MB以下</span>  
+                  </div>
+                  <input type="submit" class="btn btn-collection float-right" value="上傳">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form id="edit-event-form" data-toggle="validator">
+          <input class="form-input-bannerImgSrc" type="hidden" value="<%= node.bannerImgSrc %>">
+          <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label rib-f-size-dot8rem rib-text-color-3">名稱</label>
+            <div class="col-10">
+              <input class="form-control form-input-title" type="text" placeholder="輸入活動名稱" id="example-text-input" style="border: unset; border-bottom: 1px solid #e6e6e6;" value="<%= node.title %>" required>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="example-date-input" class="col-2 col-form-label  rib-f-size-dot8rem rib-text-color-3">日期</label>
+            <div class="col-10">
+              <input type="hidden" name="" class="form-input-startDate" value="<%= node.startDate %>">
+              <input type="hidden" name="" class="form-input-endDate" value="<%= node.endDate %>">
+              <% function formatDate(startDate, endDate){
+                 var start = new Date(startDate);
+                 var end = new Date(endDate);
+                 return start.getFullYear()+', '+(start.getMonth()+1)+'月'+start.getDate()+'日'+' - '+(end.getMonth()+1)+'月'+end.getDate()+'日'
+                 }
+                 var printDate = formatDate(node.startDate, node.endDate); %>
+              <input id="reportrange" class="form-control form-input-printDate" type="text" style="border: unset; border-bottom: 1px solid #e6e6e6;" value="<%= printDate %>" required>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label rib-f-size-dot8rem rib-text-color-3">地點</label>
+            <div class="col-10">
+              <input class="form-control form-input-address" type="text" placeholder="輸入活動地點" id="example-text-input" style="border: unset; border-bottom: 1px solid #e6e6e6;" value="<%= node.address %>" required>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleTextarea" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">簡介</label>
+            <div class="col-12">
+              <textarea class="form-control count-char form-input-abstract" id="exampleTextarea" rows="2" maxlength="50" required><%= node.abstract %></textarea>
+              <span class="char-counter float-right rib-f-size-dot8rem rib-text-color-3"></span>
+              <div class="help-block with-errors rib-text-color-5"></div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleTextarea" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">活動介紹</label>
+            <div class="col-12">
+              <textarea class="form-control count-char form-input-content" id="exampleTextarea" rows="5" maxlength="500"><%= node.content %></textarea>
+              <span class="char-counter float-right rib-f-size-dot8rem rib-text-color-3"></span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12 mb-2 ribo-badge-container" id="ribo-participant-list">
+            <% if(node.participants){ %>
+              <% for(var i = 0; i < node.participants.length; i++) { %>
+                <% var name, partic_id;
+                   if(node.participants[i].type === "user") {
+                     name = (node.participants[i].user.name)?node.participants[i].user.name:node.participants[i].user.local.email;
+                     name = "user: "+name;
+                     partic_id = node.participants[i].user._id;
+                   } else if(node.participants[i].type === "group") {
+                     name = "group: "+node.participants[i].group.title;
+                     partic_id = node.participants[i].group._id;
+                   }
+                %>
+                <span class="badge badge-pill rib-text-color-3 mr-2 rib-bg-tag" id="<%= partic_id %>"><%= name %><i class="fa fa-times partic-delete-icon" aria-hidden="true"></i></span>
+                <input type="hidden" name="participantArray[]" data-node-type="<%= node.participants[i].type %>" value="<%= partic_id %>">
+              <% } %>
+            <% } %>
+            </div>
+            <label for="participant" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">參與對象</label>
+            <div class="col-12 input-group">
+              <input type="text" class="form-control typeahead form-input-participants" id="search-input" placeholder="" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12 mb-2 ribo-tag-list">
+              <%if (node.tags) { %>
+                <% for(var i=0; i<node.tags.length; i++) {%>
+                  <span class="badge badge-pill rib-text-color-3 mr-2 rib-bg-tag"><%= node.tags[i] %><i class="fa fa-times tag-delete-icon" aria-hidden="true"></i></span>
+                  <input type="hidden" name="tagArray[]" value="<%= node.tags[i] %>">
+                <% } %>
+              <% } %>
+            </div> 
+            <label for="exampleInputTags" class="col-12 col-form-label rib-f-size-dot8rem rib-text-color-3">Tags</label>
+            <div class="col-12 input-group">
+              <input type="text" class="form-control form-input-tags" placeholder="">
+              <span class="input-group-btn">
+                <button class="btn btn-collection input-tags-btn" type="button"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="./../../../js/front/tags.js"></script>
+    <script src="./../../../js/front/count-char.js"></script>
+    <script src="./../../../js/events.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script type="text/javascript">
+      $(function() {
+
+        var start = moment();
+        var end = moment().add(7, 'days');
+        console.log($('.form-input-endDate').val());
+        if($('.form-input-startDate').val()) 
+          start = moment(new Date($('.form-input-startDate').val()));
+        if($('.form-input-endDate').val())
+          end = moment(new Date($('.form-input-endDate').val()));
+
+        var current = start.format('YYYY, M月D日') + ' - ' + end.format('M月D日');
+        function cb(start, end) {
+          $('#reportrange').val(start.format('YYYY, M月D日') + ' - ' + end.format('M月D日'));
+        }
+
+        $('#reportrange').daterangepicker({
+          startDate: start,
+          endDate: end
+        }, cb);
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+          cb(picker.startDate, picker.endDate);
+          current = picker.startDate.format('YYYY, M月D日') + ' - ' + picker.endDate.format('M月D日');
+          $('.form-input-startDate').val(picker.startDate);
+          console.log($('.form-input-startDate').val());
+          $('.form-input-endDate').val(picker.endDate);
+          console.log($('.form-input-endDate').val());
+        });
+        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+          //do something, like clearing an input
+          $('#reportrange').val(current);
+        });
+        $('#reportrange').on('hide.daterangepicker', function(ev, picker) {
+          //do something, like clearing an input
+          $('#reportrange').val(current);
+        });
+
+        cb(start, end);
+        console.log($('#reportrange').val());
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script src="./../../../js/upload-image.js"></script>
+    <script src="./../../../js/front/invite-participant.js"></script>
+</body>
+</html>

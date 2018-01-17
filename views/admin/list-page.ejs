@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: pageTitle}); %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+</head>
+<body class="<%= pageClass %> my-2">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-3">
+        <%- include('../partial/admin-nav', {active: nodeType }); %>
+      </div>
+      <div class="col-sm-12 col-md-9 mt-3">
+        <h2><%= pageTitle %></h2>
+        <hr/>
+        <div class="d-flex justify-content-end mb-3">
+          <div>
+            <a href="/admin/<%= nodeType %>/add" class="btn btn-primary">建立一篇新的內容</a>
+          </div>
+        </div>
+        <div class="alert alert-success" style="display: none" role="alert">
+          <strong>刪除成功！</strong>.
+        </div>
+        <div class="alert alert-danger" style="display: none" role="alert">
+          <strong>發生錯誤！</strong> 請稍候再試
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>標題</th>
+              <th>時間</th>
+              <th>編輯</th>
+              <th>刪除</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i=0; i < listData.length; i++) { %>
+              <tr>
+                 <th scope="row"><%= i+1 %></th>
+                 <td>
+                 <% if(nodeType === "chats") { %>
+                  <%= listData[i].content %>
+                 <% } else { %>
+                  <%= listData[i].title %>
+                 <% } %>
+                 </td>
+                 <% var d = new Date(listData[i].createdDate);
+                    var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                 %>
+                 <td><%= dFormat %></td>
+                 <td><a href="/admin/<%= nodeType %>/<%= listData[i]._id %>" data-id="<%= listData[i]._id %>" class="btn btn-sm btn-outline-primary">編輯</a></td>
+                 <td><button type="button" data-id="<%= listData[i]._id %>" data-node-type="<%= nodeType %>" class="btn btn-sm btn-outline-danger rib-delete-btn">刪除</button></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partial/admin-script'); %>
+  <script src="./../../../js/admin/delete-node.js"></script>
+  
+</body>
+</html>

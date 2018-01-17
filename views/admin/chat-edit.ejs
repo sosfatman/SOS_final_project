@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理-聊天室編輯頁"}); %>
+</head>
+<body data-nodeid="<%= node._id %>" data-type="chats">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <%- include('../partial/admin-nav', {active: "chats"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+      <%- include('../partial/breadcrum', {items: [
+          {href: "/admin",name: "管理主頁"},
+          {href: "/admin/chats",name: "聊天室列表頁"},
+          {name: "聊天室編輯頁"}
+          ]}); %>
+        <h2>聊天室編輯頁</h2>
+        <hr/>        
+        <form id="chat-node-form" method="post" action="/api/chats/<%= node._id %>">
+          <div class="form-group">
+            <label for="title">標題</label>
+            <input name="title" type="text" class="form-control" value="<%= node.title %>" id="node-form-title" placeholder="輸入標題" />
+          </div>
+          <div class="form-group">
+            <label for="tag">Tags</label>
+            <div class="clearfix">
+              <div class="ribo-tag-list">
+                <% if (node.tags) { %>
+                  <% for(var i = 0; i < node.tags.length; i++) {%>
+                     <span class="badge badge-default" data-index=<%= i %>><%= node.tags[i] %><i class="fa fa-times tag-delete-icon" aria-hidden="true"></i></span>
+                     <input type="hidden" name="tags[]" value="<%= node.tags[i] %>">
+                  <% } %>
+                <% } %>
+              </div>
+              <div class="input-group mt-2">
+                <input name="tag" type="text" class="form-control tag-input form-input-tags" placeholder="新增Tag" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary tag-add-btn">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea">內容</label>
+            <textarea name="content" class="form-control" id="node-form-content" rows="8"><%= node.content %></textarea>
+          </div>
+          <div style="text-align: right;">
+            <button type="submit" data-type="chat" class="btn btn-outline-primary rib-btn-save">儲存</button>
+            <button type="button" data-type="chat" data-id="<%= node._id %>" class="btn btn-outline-danger rib-btn-delete">刪除</button>
+          </div>
+          <div class="form-group">
+            <label for="author">創作者</label>
+            <% var authorString = "";
+               var author_id = ""
+               if(node.author){
+                 author_id = node.author._id;
+                 authorString = node.author.name+" - "+node.author.local.email;
+               }
+             %>
+            <input class="form-control" id="node-form-author" type="text" value="<%= authorString %>" autocomplete="off">
+            <input type="hidden" name="author" value="<%= author_id %>">
+          </div>
+          <div class="form-group">
+            <label for="createdDate">創立時間</label>
+            <% var d = new Date(node.createdDate);
+               dFormat = d.toISOString();
+               dFormat = dFormat.substring(0, dFormat.lastIndexOf('.'))
+            %>
+            <input name="createdDate" class="form-control" type="datetime-local" value="<%= dFormat %>" id="node-form-createdDate">
+          </div>
+        </form>
+        <hr />
+        <h5>留言內容</h5>
+        <table class="table admin-chat-comment-list">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>留言者</th>
+              <th>內容</th>
+              <th>時間</th>
+              <th>刪除</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i=0; i<node.comments.length; i++){ %>
+              <tr>
+                 <th scope="row"><%= i+1 %></th>
+                 <td><%= node.comments[i].author.local.email %></td>
+                 <td><%= node.comments[i].content %></td>
+                 <% var d = new Date(node.comments[i].createdDate);
+                    var dFormat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/')+" "+[d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                 %>
+                 <td><%= dFormat %></td>
+                 <td>
+                   <button type="button" data-id="<%= node.comments[i]._id %>" class="btn btn-sm btn-danger rib-delete-btn">刪除</button>
+                 </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+  <script src="./../../../js/admin/tags.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+  <script src="./../../../js/admin/invite-user.js"></script>
+  <script src="./../../../js/admin/delete-node.js"></script>
+</body>
+</html>

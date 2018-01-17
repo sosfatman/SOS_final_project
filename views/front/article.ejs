@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-主頁"}); %>
+</head>
+<body class="article-list-page">
+
+    <div class="main-wrapper mb-5">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded clearfix text-center">
+        <span class="rib-text-color-2">
+            9
+          </span>
+          <span class="navbar-text text-muted">
+            EMBA
+          </span>
+        </div>
+      </nav>
+      <div class="container rib articles" style="margin-top:60px">
+        <div class="row">
+          <div class="list-group">
+            <% for(var i=0; i<articles.length; i++) {%>
+            <% if(articles[i]!==undefined){ %>
+              <a href="articles/<%= articles[i]._id %>" class="list-group-item list-group-item-action" style="padding: 1rem 1.25rem;">
+                <img src="<%= articles[i].bannerImgSrc %>" class="img-responsive rounded" />
+                <div class="pt-2">
+                <small class="rib-text-color-3 rib-f-size-dot8rem rib-pt-10px">
+                <% var d = new Date(articles[i].createdDate);
+                   var dFormat = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+                %>
+                <%= dFormat %></small>
+                <p class="rib-text-color-1 rib-f-size-1rem mb-0"><%= articles[i].title %></p>
+                </div>
+             </a>
+            <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "articles"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+</body>
+</html>

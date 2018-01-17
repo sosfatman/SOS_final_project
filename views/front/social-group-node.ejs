@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-社群"}); %>
+</head>
+<body data-id="<%= group._id %>" data-type="groups" class="group-node-page">
+
+    <div class="main-wrapper mb-5 rib social">
+      <nav class="navbar navbar-light bg-faded fixed-top">
+        <div class="bg-faded text-center">
+          <button class="btn btn-outline-secondary float-left rib-nav-back" style="width: 50px">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <span class="navbar-text text-muted pb-0" style="display:inline-block;width:65%;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;"><%= group.title %></span>
+          <% if(isAuthor) { %>
+          <a role="button" class="float-right" href="/social/groups/edit/<%= group._id %>" id="editBtn"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+          <% } else { %>
+          <button data-id="<%= group._id %>"  class="btn btn-collection color-4 float-right rib-nav-like rib-nav-btn" style="width: 50px">
+            <i class="fa fa-heart-o rib-f-size-1rem" aria-hidden="true"></i>
+          </button>
+          <% } %>
+        </div>
+      </nav>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/social/groups/<%= group._id %>?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-inverse mt-5" style="min-height: 150px;">
+        <img class="card-img img-responsive" src="<%= group.bannerImgSrc %>" alt="Card image">
+        <div class="card-img-overlay">
+          <!--div class="w-100 card-sticky-top px-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <a role="button" class="float-right" href="/social/groups/edit/<%= group._id %>" id="editBtn"><span class="rib-text-color-4"><i class="fa fa-cog" aria-hidden="true"></i></span></a>
+                </div>
+              </div>
+            </div>
+          </div-->
+          <div class="w-100 card-sticky-bottom px-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <p class="mb-0 rib-text-color-4 rib-f-size-1rem"><%= group.title %></p>
+                  <small class="rib-text-color-4 rib-f-size-dot8rem pt-1"><%= group.abstract %></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rib-bg-card">
+        <div class="container">
+          <div class="row py-3">
+            <div class="col-12 pt-3">
+              <p class="rib-text-color-1 rib-f-size-1rem"><%- group.content %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-user pr-1" aria-hidden="true"></i><%= group.members.length %></span>
+          </div>
+          <div class="col-12" id="accordion" role="tablist" aria-multiselectable="true">
+            <% for(var i = 0; i < group.members.length; i++) { %>
+            <div class="card">
+              <div class="card-header p-2" role="tab" id="headingOne">
+                <h5 class="mb-0">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse-<%= i %>" aria-expanded="true" aria-controls="collapse-<%= i %>" style="text-decoration: none;">
+                    <div class="d-flex w-100 justify-content-between">
+                      <div class="chip chip-large">
+                        <img src="<%= group.members[i].data.avatarImgSrc %>" class="rounded-circle img-fluid" />
+                        <span class="rib-text-color-1 rib-f-size-1rem"><%= group.members[i].data.name %></p></span>
+                      </div>
+                      <div class="align-self-center">
+                        <span class="rib-text-color-3 rib-f-size-dot8rem"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                      </div>
+                    </div>
+                  </a>
+                </h5>
+              </div>
+              <div id="collapse-<%= i %>" class="collapse" role="tabpanel" aria-labelledby="heading-<%= i %>">
+                <div class="card-block p-2">
+                  <p class="rib-text-color-1 rib-f-size-dot8rem mb-0"><%= group.members[i].data.about %></p>
+                  <p class="text-right">
+                    <a href="/profile/<%= group.members[i].data._id %>" class="rib-text-color-2 rib-f-size-dot8rem">查看個人頁面 <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                  </p>
+                  <%  var arr = addType(group.members[i].data.favArticles, "文章", "articles").concat(addType(group.members[i].data.favChats, "聊天室", "chats"), addType(group.members[i].data.favGroups, "圈子", "social/groups"), addType(group.members[i].data.favEvents, "活動", "social/events"));
+                      function addType(arr, type, urlType){
+                        var newArr = [];
+                        arr.map(function(el){
+                          el.type = type;
+                          el.urlType = urlType;
+                          newArr.push(el);
+                        })
+                        return newArr
+                      }
+
+                      var sortedFavArr = arr.sort(function(a,b){
+                         var c = new Date(a.createdDate);
+                         var d = new Date(b.createdDate);
+                         return c-d;
+                       }); 
+                  %>
+                  <label class="rib-text-color-3 rib-f-size-dot8rem">近期收藏</label>
+                  <div class="row">
+                    <% if(sortedFavArr.length>4){ %>
+                      <% for(var j = 0; j < 4; j++) { %>
+                          <div class="col-6 col-md-3">
+                            <div class="card border-0 mb-3">
+                              <span class="badge badge-pill rib-text-color-4 rib-bg-color-5 mt-2 mr-2"><%= sortedFavArr[j].type %></span>
+                              <div class="card-img-top">
+                                <% if(sortedFavArr[j].type==="聊天室") { %>
+                                <a href="/<%= sortedFavArr[j].urlType %>/<%= sortedFavArr[j].node._id %>" >
+                                  <div class="img-wrapper rounded-circle mx-auto d-block mt-4" >
+                                    <% var avatarImgSrc = sortedFavArr[j].node.author.avatarImgSrc?sortedFavArr[j].node.author.avatarImgSrc:'/images/b1.png' %>
+                                    <img src="<%= avatarImgSrc %>">
+                                  </div>
+                                </a>                                
+                                <% } else { %>
+                                <a href="/<%= sortedFavArr[j].urlType %>/<%= sortedFavArr[j].node._id %>" >
+                                  <% var imgUrl = (sortedFavArr[j].node.bannerImgSrc)?sortedFavArr[j].node.bannerImgSrc:"/images/articles/"+sortedFavArr[j].node._id %>
+                                  <img class="img-responsive" src="<%= imgUrl %>" alt="Card image cap">
+                                </a>
+                                <% } %>
+                              </div>
+                              <div class="card-block card-block-sm p-2">
+                                <a href="/<%= sortedFavArr[j].urlType %>/<%= sortedFavArr[j].node._id %>" class="card-text rib-text-color-1 rib-f-size-dot8rem"><% if(sortedFavArr[j].type==="聊天室") { %>
+                                  <% var regexPre = /<a[^>]*>/g,
+                                         regexSuf = /<\/a>/g,
+                                         rawContent = sortedFavArr[j].node.content;
+                                         var printContent = rawContent.replace(regexPre, '<span style="color: #0275d8;">');
+                                         printContent = printContent.replace(regexSuf, '</span>');
+                                  %>
+                                  <%- printContent %>
+                                <% } else { %>
+                                  <%= sortedFavArr[j].node.title %>
+                                <% } %></a>
+                              </div>
+                            </div>
+                          </div>
+                      <% } %>
+                    <% } else{ %>
+                      <% for(var j = 0; j < sortedFavArr.length; j++) { %>
+                          <div class="col-6 col-md-3">
+                            <div class="card border-0 mb-3">
+                              <span class="badge badge-pill rib-text-color-4 rib-bg-color-5 mt-2 mr-2">圈子</span>
+                              <div class="card-img-top">
+                                <img class="img-responsive" src="http://www.cdnews.com.tw/upload/201605/11/103674136.jpg" alt="Card image cap">
+                              </div>
+                              <div class="card-block card-block-small p-2">
+                                <p class="card-text rib-text-color-1 rib-f-size-dot8rem"><%= sortedFavArr[j].title %></p>
+                              </div>
+                            </div>
+                          </div>
+                      <% } %>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %>
+            
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-tag pr-1" aria-hidden="true"></i>Tags</span>
+          </div>
+          <div class="col-12">
+          <% if(group.tags) { %>
+            <% for(var i = 0; i < group.tags.length; i++) { %>
+              <a href="/explore/<%= group.tags[i] %>">
+                <span class="badge badge-pill rib-text-color-3 ml-1 mb-2 rib-bg-tag"><%= group.tags[i]%></span>
+              </a>
+            <% } %>
+          <% } %>
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12 mb-3">
+            <span class="rib-text-color-2 rib-f-size-dot8rem"><i class="fa fa-heart pr-1" aria-hidden="true"></i><%= favUsers.length %></span>
+          </div>
+          <div class="col-12 pr-0">
+            <div class="d-flex flex-row" style="overflow-x: auto;">
+              <% for(var i = 0 ; i < favUsers.length; i++) { %>
+                <div class="p-2">
+                  <div class="img-wrapper rounded-circle">
+                    <a href="/profile/<%= favUsers[i]._id %>">
+                      <img src="<%=  favUsers[i].avatarImgSrc %>">
+                    </a>
+                  </div>
+                  <p class="text-center rib-text-color-1 rib-f-size-dot8rem pt-3"><%= favUsers[i].name %></p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "social"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./../../../js/like.js"></script>
+    <script src="./../../../js/front/navigate-back.js"></script>
+</body>
+</html>

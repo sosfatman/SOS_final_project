@@ -1,0 +1,30 @@
+{
+  "name": "9EMBA",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mocha": "^3.1.0",
+    "moment": "^2.16.0",
+    "mongoose": "^4.6.5",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "simple-jekyll-search": "^1.1.5"
+  },
+  "devDependencies": {
+    "supertest": "^2.0.0"
+  }
+}

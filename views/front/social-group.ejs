@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <%- include('../partial/header', {title: "9EMBA-社群"}); %>
+</head>
+<body class="group-list-page">
+
+    <div class="main-wrapper mb-5 rib social">
+      <nav class="navbar navbar-light bg-faded fixed-top p-0">
+        <div class="bg-faded clearfix text-center px-2 py-2">
+          <span class="navbar-text text-muted">
+            社群
+          </span>
+          <a href="/social/groups/post" id="postBtn" class="btn btn-outline-secondary float-right" style="position:absolute; right:20px;">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </a>
+        </div>
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active text-center rib-text-color-4" href="/social/groups" role="tab">圈子</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-center rib-text-color-4" href="/social/events" role="tab">活動</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能建立圈子喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/social/groups/post" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade collection" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document" style="vertical-align: middle; display: inline-block;">
+          <div class="modal-content">
+            <div class="modal-body text-center p-4">
+              <span class="font-weight-bold">要登入才能收藏喔！</span>
+            </div>
+            <div class="modal-footer p-0">
+              <button type="button" class="btn btn-secondary w-50 border-0" data-dismiss="modal">取消</button>
+              <a href="/social/groups?requestLogin=true" role="button" class="btn btn-secondary w-50 border-0">登入</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" style="margin-top:100px">
+        <div class="row">
+          <div class="tab-content">
+            <div class="tab-pane active" id="circle" role="tabpanel">
+              <div class="list-group rib-list-groups">
+              <% for(var i=0; i<groups.length; i++) {%>
+                <a href="/social/groups/<%= groups[i].id %>" class="list-group-item list-group-item-action">
+                  <div class="card" style="min-height: 150px;">
+                    <div class="card-block rounded">
+                      <div class="media">
+                        <div class="img-wrapper d-flex rounded mr-3">
+                          <img src="<%= groups[i].bannerImgSrc %>" alt="Generic placeholder image" />
+                        </div>
+                        <div class="media-body">
+                        <% var isAuthorized = false;
+                           var members_ids = [];
+                           for(var j = 0; j < groups[i].members.length; j++) {
+                             members_ids.push(String(groups[i].members[j].data));
+                           }
+                           var memberIndex = members_ids.indexOf(String(user_id));
+                           if(groups[i].author) {
+                             if(String(user_id) === String(groups[i].author)) {
+                               isAuthorized = true;
+                             }
+                           }
+                           if(memberIndex >= 0 && groups[i].members[memberIndex].isLeader) {
+                             isAuthorized = true;
+                           }
+                        %>
+                        <% if(isAuthorized) { %>
+                          <div class="d-flex w-100 justify-content-between">
+                              <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= groups[i].title %></p>
+                              <span class="rib-f-size-dot8rem icon-collection px-2"><i class="fa fa-user" aria-hidden="true"></i></span>
+                          </div>
+                        <% } else { %>
+                          <p class="mb-0 rib-text-color-1 rib-f-size-1rem"><%= groups[i].title %></p>
+                        <% } %>
+                          <p class="rib-text-color-3 rib-f-size-dot8rem rib-h-40"><%= groups[i].abstract %></p>
+                          <div>
+                            <small class="rib-text-color-3 rib-f-size-dot8rem">
+                              <i class="fa fa-user pr-1" aria-hidden="true"></i><span class="rib-member-count"><%= groups[i].members.length %></span>
+                              <i class="fa fa-heart pl-1 pr-1" aria-hidden="true"></i><span class="rib-like-count" data-id="<%= groups[i]._id %>">0</span>
+                            </small>
+                            <% if(!isAuthorized) { %>
+                            <button type="button" class="btn btn-collection float-right rib-list-like rib-nav-like" data-type="groups" data-id="<%= groups[i]._id %>">
+                              <span class="rib-f-size-dot8rem"><i class="fa fa-heart-o pr-1" aria-hidden="true"></i>收藏</span>
+                            </button>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              <% } %>
+              </div>
+            </div>
+            <div class="tab-pane" id="event" role="tabpanel">
+              <div class="list-group">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partial/footer', {active: "social"}); %>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./../../../js/like.js"></script>
+    <script src="./../../../js/count-like.js"></script>
+    <script src="./../../../js/groups.js"></script>
+</body>
+</html>

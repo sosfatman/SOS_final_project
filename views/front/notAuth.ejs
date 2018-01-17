@@ -1,0 +1,48 @@
+<html>
+  <%- include('../partial/header', {title: "9EMBA-個人主頁"}); %>
+
+  <body>
+    <div class="rib login">
+      <div class="bg-img-filter">
+        <div class="container">
+          <% if (message != "") { %>
+            <div class="row">
+              <div class="col-sm-12" style="position:absolute; top:50vh;">
+                <div class="p-2">
+                  <p class="text-xs-center"><%= message %></p>
+                </div>
+              </div>
+            </div>
+          <% } %>
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex justify-content-center h-100">
+                <div class="align-self-center w-100">
+                  <h1 class="text-center" style="margin-bottom: 86px"><img src="/images/logo.png" width="90px" height="90px"></h1>
+                  <form class="mx-3" action="/login" method="post">
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 50px;">
+                      <input type="password" class="form-control" name="password" placeholder="Password">
+                    </div>
+                    <div class="mx-auto" style="width: 188px;">
+                      <input type="submit" class="btn btn-collection btn-xl" value="登入" />
+                    </div>
+                  </form>
+                  <div class="text-center rib-f-size-dot8rem">
+                    <span class="rib-text-color-4">還沒有帳號嗎？</span><a class="rib-text-color-2" href="/signup">註冊</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../partial/footer', {active: "profile"}); %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理-標籤管理頁"}); %>
+</head>
+<body data-type="tags">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <%- include('../partial/admin-nav', {active: "tags"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+      <h2><%= pageTitle %></h2>
+        <hr/>
+        <div class="alert alert-success" style="display: none" role="alert">
+          <strong>處理成功！</strong>.
+        </div>
+        <div class="alert alert-danger" style="display: none" role="alert">
+          <strong>發生錯誤！</strong> 請稍候再試
+        </div>
+        <div class="col-sm-12">
+          <div class="ribo-badge-container">
+            <p class="lead">
+            <% var count = 0, addCount = 0, sortCount = 0, cleanCount = 0, deleteCount = 0;%>
+            <% var tagNames = [];%>
+            <% for(var i=0; i < tags.length; i++) { tagNames.push(tags[i].name); %>
+              <span class="badge badge-pill badge-default" data-name="<%= tags[i].name %>"><%= tags[i].name+" "+(tags[i].articles.length+tags[i].chats.length+tags[i].groups.length+tags[i].events.length) %>&nbsp<i class="fa fa-times tag-delete-icon" aria-hidden="true"></i></span>
+            <% } %>
+            </p>
+          </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>標題</th>
+              <th>創建日期</th>
+              <th>類別</th>
+              <th>ID</th>
+              <th>處理方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i=0; i < articles.length; i++) { %>
+            <% if(articles[i].tags){ %>
+            <% for(var j=0; j < articles[i].tags.length; j++) { %>
+            <% if(!(tagNames.indexOf(articles[i].tags[j])>=0)) { %>
+            <% count++ %>
+            <% addCount++ %>
+            <tr>
+              <th scope="row"><%= count %></th>
+              <td><%= articles[i].tags[j] %></td>
+              <td><%= articles[i].createdDate %> </td>
+              <td><%= "articles" %></td>
+              <td><%= articles[i]._id %></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary ribo-tag-sort">新增</button></td>
+            </tr>
+            <% } else { %>
+              <% for(var k=0; k < tags.length; k++) { %>
+              <% if(tags[k].name===articles[i].tags[j] && tags[k].articles.indexOf(articles[i]._id)==-1) { %>
+              <% count++ %>
+              <% sortCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= articles[i].tags[j] %></td>
+                 <td><%= articles[i].createdDate %> </td>
+                 <td><%= "articles" %></td>
+                 <td><%= articles[i]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-success ribo-tag-sort">歸戶</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% var articleIds = []; %>
+            <% for(var i=0; i < articles.length; i++) { articleIds.push(articles[i]._id.toString()); } %>
+            <% for(var i=0; i < tags.length; i++) { %>
+            <% for(var j=0; j < tags[i].articles.length; j++) { %>
+            <% if(articleIds.indexOf(tags[i].articles[j].toString()) >= 0) { %>
+              <% if(articles[articleIds.indexOf(tags[i].articles[j].toString())].tags.indexOf(tags[i].name) < 0) { %>
+              <% count++ %>
+              <% cleanCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= articles[articleIds.indexOf(tags[i].articles[j].toString())].createdDate %> </td>
+                 <td><%= "articles" %></td>
+                 <td><%= articles[articleIds.indexOf(tags[i].articles[j].toString())]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-warning ribo-tag-clean">清理</button></td>
+              </tr>
+              <% } %>
+            <% } else { %>
+            <% count++ %>
+            <% deleteCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= "no data" %> </td>
+                 <td><%= "articles" %></td>
+                 <td><%= tags[i].articles[j].toString() %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-danger ribo-tag-clean">刪除</button></td>
+              </tr>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% for(var i=0; i < chats.length; i++) { %>
+            <% if(chats[i].tags) { %>
+            <% for(var j=0; j < chats[i].tags.length; j++) { %>
+            <% if(!(tagNames.indexOf(chats[i].tags[j])>=0)) { %>
+            <% count++ %>
+            <% addCount++ %>
+            <tr>
+              <th scope="row"><%= count %></th>
+              <td><%= chats[i].tags[j] %></td>
+              <td><%= chats[i].createdDate %> </td>
+              <td><%= "chats" %></td>
+              <td><%= chats[i]._id %></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary ribo-tag-sort">新增</button></td>
+            </tr>
+            <% } else { %>
+              <% for(var k=0; k < tags.length; k++) { %>
+              <% if(tags[k].name===chats[i].tags[j] && tags[k].chats.indexOf(chats[i]._id)==-1) { %>
+              <% count++ %>
+              <% sortCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= chats[i].tags[j] %></td>
+                 <td><%= chats[i].createdDate %> </td>
+                 <td><%= "chats" %></td>
+                 <td><%= chats[i]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-success ribo-tag-sort">歸戶</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% var chatIds = []; %>
+            <% for(var i=0; i < chats.length; i++) { chatIds.push(chats[i]._id.toString()); } %>
+            <% for(var i=0; i < tags.length; i++) { %>
+            <% for(var j=0; j < tags[i].chats.length; j++) { %>
+            <% if(chatIds.indexOf(tags[i].chats[j].toString()) >= 0) { %>
+              <% if(chats[chatIds.indexOf(tags[i].chats[j].toString())].tags.indexOf(tags[i].name) < 0) { %>
+              <% count++ %>
+              <% cleanCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= chats[chatIds.indexOf(tags[i].chats[j].toString())].createdDate %> </td>
+                 <td><%= "chats" %></td>
+                 <td><%= chats[chatIds.indexOf(tags[i].chats[j].toString())]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-warning ribo-tag-clean">清理</button></td>
+              </tr>
+              <% } %>
+            <% } else { %>
+            <% count++ %>
+            <% deleteCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= "no data" %> </td>
+                 <td><%= "chats" %></td>
+                 <td><%= tags[i].chats[j].toString() %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-danger ribo-tag-clean">刪除</button></td>
+              </tr>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% for(var i=0; i < groups.length; i++) { %>
+            <% if(groups[i].tags) { %>
+            <% for(var j=0; j < groups[i].tags.length; j++) { %>
+            <% if(!(tagNames.indexOf(groups[i].tags[j])>=0)) { %>
+            <% count++ %>
+            <% addCount++ %>
+            <tr>
+              <th scope="row"><%= count %></th>
+              <td><%= groups[i].tags[j] %></td>
+              <td><%= groups[i].createdDate %> </td>
+              <td><%= "groups" %></td>
+              <td><%= groups[i]._id %></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary ribo-tag-sort">新增</button></td>
+            </tr>
+            <% } else { %>
+              <% for(var k=0; k < tags.length; k++) { %>
+              <% if(tags[k].name===groups[i].tags[j] && tags[k].groups.indexOf(groups[i]._id)==-1) { %>
+              <% count++ %>
+              <% sortCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= groups[i].tags[j] %></td>
+                 <td><%= groups[i].createdDate %> </td>
+                 <td><%= "groups" %></td>
+                 <td><%= groups[i]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-success ribo-tag-sort">歸戶</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+            
+            <% var groupIds = []; %>
+            <% for(var i=0; i < groups.length; i++) { groupIds.push(groups[i]._id.toString()); } %>
+            <% for(var i=0; i < tags.length; i++) { %>
+            <% for(var j=0; j < tags[i].groups.length; j++) { %>
+            <% if(groupIds.indexOf(tags[i].groups[j].toString()) >= 0) { %>
+              <% if(groups[groupIds.indexOf(tags[i].groups[j].toString())].tags.indexOf(tags[i].name) < 0) { %>
+              <% count++ %>
+              <% cleanCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= groups[groupIds.indexOf(tags[i].groups[j].toString())].createdDate %> </td>
+                 <td><%= "groups" %></td>
+                 <td><%= groups[groupIds.indexOf(tags[i].groups[j].toString())]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-warning ribo-tag-clean">清理</button></td>
+              </tr>
+              <% } %>
+            <% } else { %>
+            <% count++ %>
+            <% deleteCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= "no data" %> </td>
+                 <td><%= "groups" %></td>
+                 <td><%= tags[i].groups[j].toString() %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-danger ribo-tag-clean">刪除</button></td>
+              </tr>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% for(var i=0; i < events.length; i++) { %>
+            <% if(events[i].tags) { %>
+            <% for(var j=0; j < events[i].tags.length; j++) { %>
+            <% if(!(tagNames.indexOf(events[i].tags[j])>=0)) { %>
+            <% count++ %>
+            <% addCount++ %>
+            <tr>
+              <th scope="row"><%= count %></th>
+              <td><%= events[i].tags[j] %></td>
+              <td><%= events[i].createdDate %> </td>
+              <td><%= "events" %></td>
+              <td><%= events[i]._id %></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary ribo-tag-sort">新增</button></td>
+            </tr>
+            <% } else { %>
+              <% for(var k=0; k < tags.length; k++) { %>
+              <% if(tags[k].name===events[i].tags[j] && tags[k].events.indexOf(events[i]._id)==-1) { %>
+              <% count++ %>
+              <% sortCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= events[i].tags[j] %></td>
+                 <td><%= events[i].createdDate %> </td>
+                 <td><%= "events" %></td>
+                 <td><%= events[i]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-success ribo-tag-sort">歸戶</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+            <% } %>
+
+            <% var eventIds = []; %>
+            <% for(var i=0; i < events.length; i++) { eventIds.push(events[i]._id.toString()); } %>
+            <% for(var i=0; i < tags.length; i++) { %>
+            <% for(var j=0; j < tags[i].events.length; j++) { %>
+            <% if(eventIds.indexOf(tags[i].events[j].toString()) >= 0) { %>
+              <% if(events[eventIds.indexOf(tags[i].events[j].toString())].tags.indexOf(tags[i].name) < 0) { %>
+              <% count++ %>
+              <% cleanCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= events[eventIds.indexOf(tags[i].events[j].toString())].createdDate %> </td>
+                 <td><%= "events" %></td>
+                 <td><%= events[eventIds.indexOf(tags[i].events[j].toString())]._id %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-warning ribo-tag-clean">清理</button></td>
+              </tr>
+              <% } %>
+            <% } else { %>
+            <% count++ %>
+            <% deleteCount++ %>
+              <tr>
+                 <th scope="row"><%= count %></th>
+                 <td><%= tags[i].name %></td>
+                 <td><%= "no data" %> </td>
+                 <td><%= "events" %></td>
+                 <td><%= tags[i].events[j].toString() %></td>
+                 <td><button type="button" class="btn btn-sm btn-outline-danger ribo-tag-clean">刪除</button></td>
+              </tr>
+            <% } %>
+            <% } %>
+            <% } %>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-2 offset-1 text-center">
+          <h1 class="text-muted"><%= count %></h1>
+          <label>待處理總數</label>
+        </div>
+        <div class="col-2 text-center">
+          <h1 class="text-primary"><%= addCount %></h1>
+          <label>新增</label>
+        </div>
+        <div class="col-2 text-center">
+          <h1 class="text-success"><%= sortCount %></h1>
+          <label>歸戶</label>
+        </div>
+        <div class="col-2 text-center">
+          <h1 class="text-warning"><%= cleanCount %></h1>
+          <label>清理</label>
+        </div>
+        <div class="col-2 text-center">
+          <h1 class="text-danger"><%= deleteCount %></h1>
+          <label>刪除</label>
+        </div>
+        </div>
+        
+      </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+  <script src="./../../../js/admin/tags.js"></script>
+  <script src="./../../../js/admin/admin-form.js"></script>
+  <script src="./../../../js/admin/delete-node.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理-聊天室新增頁"}); %>
+</head>
+<body data-type="chats">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <%- include('../partial/admin-nav', {active: "chats"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+      <%- include('../partial/breadcrum', {items: [
+          {href: "/admin",name: "管理主頁"},
+          {href: "/admin/chats",name: "聊天室列表頁"},
+          {name: "聊天室新增頁"}
+          ]}); %>
+        <h2>聊天室新增頁</h2>
+        <hr/>        
+        <form id="chat-add-form" method="post" action="/api/chats">
+          <div class="form-group">
+            <label for="title">標題</label>
+            <input name="title" type="text" class="form-control" id="node-form-title" placeholder="輸入標題" />
+          </div>
+          <div class="form-group">
+            <label for="tag">Tags</label>
+            <div class="clearfix">
+              <div class="ribo-tag-list">
+              </div>
+              <div class="input-group mt-2">
+                <input name="tag" type="text" class="form-control tag-input form-input-tags" placeholder="新增Tag" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary tag-add-btn">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="content">內容</label>
+            <textarea name="content" class="form-control" id="node-form-content" rows="8"></textarea>
+          </div>
+          <div style="text-align: right;">
+            <button type="submit" data-type="chat" class="btn btn-outline-primary rib-btn-save">新增</button>
+          </div>
+          <div class="form-group">
+            <label for="author">創作者</label>
+            <input class="form-control" id="node-form-author" type="text" value="" autocomplete="off">
+            <input type="hidden" name="author">
+          </div>
+          <div class="form-group">
+            <label for="title">創立時間</label>
+            <% var d = new Date();
+               dFormat = d.toISOString();
+               dFormat = dFormat.substring(0, dFormat.lastIndexOf('.'));
+            %>
+            <input class="form-control" id="disabledInput" type="datetime-local" value="<%= dFormat %>" disabled>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+  <script src="./../../../js/admin/tags.js"></script>
+  <script src="./../../../js/admin/delete-node.js"></script>
+</body>
+</html>

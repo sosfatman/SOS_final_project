@@ -1,0 +1,9 @@
+<ol class="breadcrumb mt-1">
+  <% for(var i=0; i<items.length; i++){ %>
+    <% if(items[i].href) { %>
+      <li class="breadcrumb-item"><a href="<%= items[i].href %>"><%= items[i].name %></a></li>
+    <% } else{ %>
+       <li class="breadcrumb-item active"><%= items[i].name %></li>
+    <% } %>
+  <% } %>
+</ol>

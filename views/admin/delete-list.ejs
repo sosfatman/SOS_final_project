@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partial/admin-head', {title: "平台管理-標籤管理頁"}); %>
+</head>
+<body data-type="tags">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <%- include('../partial/admin-nav', {active: "delete"}); %>
+      </div>
+      <div class="col-sm-12 col-md-9">
+        <h2><%= pageTitle %></h2>
+        <hr/>
+        <div class="alert alert-success" style="display: none" role="alert">
+          <strong>復原成功！</strong>.
+        </div>
+        <div class="alert alert-danger" style="display: none" role="alert">
+          <strong>發生錯誤！</strong> 請稍候再試
+        </div>
+        <div class="col-sm-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>標題</th>
+                <th>創建日期</th>
+                <th>類別</th>
+                <th>ID</th>
+                <th>處理方式</th>
+              </tr>
+            </thead>
+            <% var count = 0; %>
+            <tbody>
+              <% for(var i = 0; i < articles.length; i++){ %>
+              <% if(articles[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= articles[i].title %></td>
+                <td><%= articles[i].createdDate %> </td>
+                <td><%= "articles" %></td>
+                <td><%= articles[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= articles[i]._id %>" data-node-type="articles">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+              <% for(var i = 0; i < chats.length; i++){ %>
+              <% if(chats[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= chats[i].content %></td>
+                <td><%= chats[i].createdDate %> </td>
+                <td><%= "chats" %></td>
+                <td><%= chats[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= chats[i]._id %>" data-node-type="chats">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+              <% for(var i = 0; i < groups.length; i++){ %>
+              <% if(groups[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= groups[i].title %></td>
+                <td><%= groups[i].createdDate %> </td>
+                <td><%= "groups" %></td>
+                <td><%= groups[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= groups[i]._id %>" data-node-type="groups">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+              <% for(var i = 0; i < events.length; i++){ %>
+              <% if(events[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= events[i].title %></td>
+                <td><%= events[i].createdDate %> </td>
+                <td><%= "events" %></td>
+                <td><%= events[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= events[i]._id %>" data-node-type="events">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+              <% for(var i = 0; i < tags.length; i++){ %>
+              <% if(tags[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= tags[i].name %></td>
+                <td><%= tags[i].createdDate %> </td>
+                <td><%= "tags" %></td>
+                <td><%= tags[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= tags[i].name %>" data-node-type="tags">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+              <% for(var i = 0; i < users.length; i++){ %>
+              <% if(users[i].isDeleted){ %>
+              <% count++; %>
+              <tr>
+                <th scope="row"><%= count %></th>
+                <td><%= users[i].name %></td>
+                <td><%= users[i].createdDate %> </td>
+                <td><%= "users" %></td>
+                <td><%= users[i]._id %></td>
+                <td><button type="button" class="btn btn-sm btn-outline-primary rib-delete-btn" data-id="<%= users[i]._id %>" data-node-type="users">復原</button></td>
+              </tr>
+              <% } %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../partial/admin-script'); %>
+  <script src="./../../../js/admin/tags.js"></script>
+  <script src="./../../../js/admin/delete-node.js"></script>
+</body>
+</html>
